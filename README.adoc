@@ -1,0 +1,87 @@
+== Install Dependencies
+
+[source, bash]
+----
+npm install -g azure-functions-core-tools@4 --unsafe-perm true
+----
+
+== Create az Azure Functions project
+
+[source, bash]
+----
+func init
+----
+
+== Create a function
+
+[source, bash]
+----
+func new
+----
+
+== Run your function project locally
+
+[source, bash]
+----
+func start
+----
+
+== Deploy your code to Azure
+
+[source, bash]
+----
+func azure functionapp publish <APP NAME>
+----
+
+== login to azure
+
+[source, bash]
+----
+az login
+----
+
+== Create a resource group
+
+[source, bash]
+----
+az group create --name <RESOURCE GROUP NAME> --location <REGION>
+----
+
+== Create a general-purpose storage account in your resource gruop and region
+
+[source, bash]
+----
+az storage account create \
+    --name <STORAGE_NAME> \
+    --location <REGION> \
+    --resource-group <RESOURCE GROUP NAME> \
+    --sku Standard_LRS
+----
+
+== Create the function app in Azure
+
+[source, bash]
+----
+az functionapp create \
+    --resource-group <RESOURCE GROUP NAME> \
+    --consumption-plan-location westeurope \
+    --runtime python \
+    --runtime-version 3.9 \
+    --functions-version 4 \
+    --name <APP_NAME> \
+    --os-type linux \
+    --storage-account <STORAGE_NAME>
+----
+
+== Deploy the function project to Azure
+
+[source, bash]
+----
+func azure functionapp publish <APP_NAME>
+----
+
+== Links
+https://learn.microsoft.com/en-us/azure/cosmos-db/table/quickstart-python?tabs=azure-portal[comsmos-tables-with-python]
+https://learn.microsoft.com/en-us/azure/cosmos-db/nosql/samples-python[sample-python]
+https://learn.microsoft.com/en-us/azure/azure-functions/create-first-function-vs-code-python[fist-function-vs-code-python]
+https://learn.microsoft.com/en-us/python/api/azure-cosmosdb-table/azure.cosmosdb.table.tableservice.tableservice[tableservice api]
