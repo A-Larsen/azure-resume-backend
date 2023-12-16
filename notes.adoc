@@ -1,0 +1,2 @@
+== Links
+https://stackoverflow.com/questions/6922145/what-is-the-difference-between-server-side-cookie-and-client-side-cookie[Differences in cookies]

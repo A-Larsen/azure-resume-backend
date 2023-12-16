@@ -30,6 +30,7 @@ def http_trigger(req: func.HttpRequest) -> func.HttpResponse:
     json_str = json.dumps({
         "yo" : 1
     })
-    headers["Set-Cookie"] = f"uuid={str(uuid.uuid4())}; SameSite=Strict; visited=true; SameSite=Strict"
+    # headers["Set-Cookie"] = f"uuid={str(uuid.uuid4())}; SameSite=Strict; visited=true; SameSite=Strict"
+    headers["Set-Cookie"] = f"visited=true; SameSite=Strict"
     return func.HttpResponse(body=json_str, headers=headers);
 
