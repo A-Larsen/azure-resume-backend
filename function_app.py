@@ -10,7 +10,7 @@ headers = {
         "Access-Control-Allow-Origin": "*",
         "Content-Type" : "application/json",
         "Access-Control-Allow-Headers": 
-        "Access-Control-Allow-Origin,Origin,Content-Type,Accept",
+        "Access-Control-Allow-Origin,Origin,Content-Type,Accept,Set-Cookie",
         "Access-Control-Allow-Methods": "GET,PUT,POST",
 }
 
@@ -19,6 +19,10 @@ headers = {
 def http_trigger(req: func.HttpRequest) -> func.HttpResponse:
     # logging.info('Python HTTP trigger function processed a request.')
     req_body = None
+    print("header: ",  req.headers.get("Set-Cookie"))
+    print("header: ",  req.headers.get("Content-Type"))
+    if (req.headers.get("Content-Type") == "application/json"):
+        print("yep")
     try:
         # if I don't handle the exception the get_json method does not work
         req_body = req.get_json()
