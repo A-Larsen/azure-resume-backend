@@ -7,41 +7,36 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using System.Net.Http;
+using System.Text;
 
 namespace My.Functions
 {
     public static class HttpExample
     {
         [FunctionName("HttpExample")]
-        public static async Task<IActionResult> Run(
+        public static HttpResponseMessage Run(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
             [CosmosDB(databaseName: "my-database", collectionName: "my-container",
-             ConnectionStringSetting = "CosmosDbConnectionString")]IAsyncCollector<dynamic> documentsOut,
+             Id = "1", PartitionKey = "1",
+             ConnectionStringSetting = "CosmosDbConnectionString"
+             )] Counter counter,
+            [CosmosDB(databaseName: "my-database", collectionName: "my-container",
+             Id = "1", PartitionKey = "1",
+             ConnectionStringSetting = "CosmosDbConnectionString"
+             )] out Counter updatedCounter,
             ILogger log)
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
 
-            string name = req.Query["name"];
+            updatedCounter = counter;
+            updatedCounter.Count += 1;
+            var jsonToReturn = JsonConvert.SerializeObject(counter);
 
-            string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            dynamic data = JsonConvert.DeserializeObject(requestBody);
-            name = name ?? data?.name;
-            if (!string.IsNullOrEmpty(name))
+            return new HttpResponseMessage(System.Net.HttpStatusCode.OK)
             {
-                // Add a JSON document to the output container.
-                await documentsOut.AddAsync(new
-                {
-                    // create a random ID
-                    id = System.Guid.NewGuid().ToString(),
-                    name = name
-                });
-            }
-
-            string responseMessage = string.IsNullOrEmpty(name)
-                ? "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response."
-                : $"Hello, {name}. This HTTP triggered function executed successfully.";
-
-            return new OkObjectResult(responseMessage);
+                Content = new StringContent(jsonToReturn, Encoding.UTF8, "application/json")
+            };
         }
     }
 }
