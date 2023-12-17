@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "azure_resume_backend": {
+      "commandName": "Project",
+      "commandLineArgs": "--port 7048",
+      "launchBrowser": false
+    }
+  }
+}
